@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
     // once we’re done, we shut down the MPI environment
     // all processes should call this before they exit
     // this frees up the resources used by MPI
+    //
     MPI_Finalize();
     return 0;
 }
