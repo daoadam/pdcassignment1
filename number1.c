@@ -33,6 +33,35 @@ int main(int argc, char** argv) {
     // every process should print a unique line
     printf("process %d of %d is running\n", rank, size);
 
+    // we only want 5 processes for this program
+    // this is part of the ring structure requirement
+    // if it's not 5, we stop early and print an error
+    // only rank 0 prints to avoid duplicate messages
+    if (size != 5) {
+        if (rank == 0) {
+            printf("error: must run with exactly 5 processes\n");
+        }
+        MPI_Finalize();
+        return 1;
+    }
+
+    // we expect 5 numbers to be passed in through the command line
+    // argc includes the program name, so total should be 6 (program + 5 numbers)
+    // if not, we show a usage message and exit the program early
+    // only rank 0 prints the message to avoid clutter
+    if (argc != 6) {
+        if (rank == 0) {
+            printf("usage: ./numbers1 <5 numbers>\n");
+        }
+        MPI_Finalize();
+        return 1;
+    }
+
+    // each process reads one number from argv based on its rank
+    // rank 0 reads argv[1], rank 1 reads argv[2], etc.
+    // atoi converts the string input to an actual integer
+    int my_number = atoi(argv[rank + 1]);
+
     // once we’re done, we shut down the MPI environment
     // all processes should call this before they exit
     // this frees up the resources used by MPI
