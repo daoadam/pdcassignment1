@@ -70,6 +70,18 @@ int main(int argc, char** argv) {
 
     // show neighbor relationships for debugging
     printf("process %d has left neighbor %d and right neighbor %d\n", rank, left, right);
+
+    // variable to store the number received from left neighbor
+    int received_from_left;
+
+    // send own number to the right, and receive number from the left
+    // we must do recv first to avoid potential deadlocks in blocking mode
+    MPI_Recv(&received_from_left, 1, MPI_INT, left, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Send(&my_number, 1, MPI_INT, right, 0, MPI_COMM_WORLD);
+
+    // test print to confirm the number received from left neighbor
+    printf("process %d received number %d from left neighbor %d\n", rank, received_from_left, left);
+    
     MPI_Finalize();
     return 0;
 }
