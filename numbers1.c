@@ -7,9 +7,11 @@ This MPI program runs 5 processes in a ring topology.
 Each process gets a number from command-line input and checks if it's smaller
 than its left neighbor. Neighbors are calculated using modular arithmetic to
 wrap around the ring. Each process sends its number to the right and receives
-from the left. If its number is out of order, it prints a message, then all
-processes signal when they're done. Code is structured step-by-step with
-comments explaining input, neighbors, communication, and logic.
+from the left using MPI_Sendrecv to avoid deadlocks. If its number is out of
+order, it prints a message. Then all processes signal when they're done.
+
+Code is structured step-by-step with comments explaining input, neighbor
+calculation, communication, and comparison logic.
 */
 
 #include <mpi.h>    // for MPI functions
