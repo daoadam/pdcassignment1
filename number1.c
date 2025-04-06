@@ -61,11 +61,15 @@ int main(int argc, char** argv) {
     // rank 0 reads argv[1], rank 1 reads argv[2], etc.
     // atoi converts the string input to an actual integer
     int my_number = atoi(argv[rank + 1]);
+    printf("process %d got number %d\n", rank, my_number);
 
-    // once we’re done, we shut down the MPI environment
-    // all processes should call this before they exit
-    // this frees up the resources used by MPI
-    //
+    // calculate neighbor ranks in the ring
+    // wrap-around is handled by using modulo math
+    int left = (rank - 1 + size) % size;
+    int right = (rank + 1) % size;
+
+    // show neighbor relationships for debugging
+    printf("process %d has left neighbor %d and right neighbor %d\n", rank, left, right);
     MPI_Finalize();
     return 0;
 }
